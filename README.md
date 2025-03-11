@@ -79,11 +79,14 @@ If you want to run everything inside Docker:
 ```bash
 docker run -it --rm --net=host \
     --env DISPLAY=$DISPLAY \
+    --env QT_X11_NO_MITSHM=1 \
     --env TURTLEBOT3_MODEL=waffle \
     --env ROS_DOMAIN_ID=0 \
+    --env SDL_AUDIODRIVER=dummy \
     --volume /tmp/.X11-unix:/tmp/.X11-unix \
     robot_autonomy ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
+Note: Gazebo may or may not load with the above command.
 
 ### **2️⃣ Run `obstacle_avoidance` in Docker**
 ```bash
@@ -91,6 +94,7 @@ docker run -it --rm --net=host \
     --env ROS_DOMAIN_ID=0 \
     robot_autonomy ros2 run robot_autonomy obstacle_avoidance --ros-args -p linear_velocity:=0.3
 ```
+This command will work when the Host loads Gazebo but may not work when Gazebo is launched using the docker command mentioned Step 1. 
 
 ---
 
@@ -104,7 +108,7 @@ docker run -it --rm --net=host \
 | **Run Teleop** | `ros2 run turtlebot3_teleop teleop_keyboard` |
 | **Run Obstacle Avoidance (`0.2` speed)** | `ros2 run robot_autonomy obstacle_avoidance --ros-args -p linear_velocity:=0.2` |
 | **Run Obstacle Avoidance (`0.5` speed)** | `ros2 run robot_autonomy obstacle_avoidance --ros-args -p linear_velocity:=0.5` |
-| **Run Gazebo in Docker** | `docker run -it --rm --net=host robot_autonomy ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py` |
+| **Run Gazebo in Docker** | `docker run -it --rm --net=host --env DISPLAY=$DISPLAY   --env QT_X11_NO_MITSHM=1   --env TURTLEBOT3_MODEL=waffle  --env ROS_DOMAIN_ID=0  --env SDL_AUDIODRIVER=dummy --volume /tmp/.X11-unix:/tmp/.X11-unix     robot_autonomy ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py` |
 | **Run Obstacle Avoidance in Docker** | `docker run -it --rm --net=host robot_autonomy ros2 run robot_autonomy obstacle_avoidance --ros-args -p linear_velocity:=0.3` |
 
 🚀 **Now you’re ready to test teleoperation & obstacle avoidance for TurtleBot3 in ROS 2 Humble!**
